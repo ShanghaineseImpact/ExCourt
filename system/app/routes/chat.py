@@ -1,8 +1,7 @@
 from flask import Blueprint, request, jsonify
-from app import mysql, socketio
-from flask_socketio import emit, join_room
 from datetime import datetime
-from MySQLdb.cursors import DictCursor
+from execute_for_sql import select, insert, update  # 导入封装的SQL函数
+import os
 
 bp = Blueprint('chat', __name__, url_prefix='/chat')
 
@@ -23,41 +22,40 @@ def send_message():
         return jsonify({'message': 'Missing required fields'}), 400
 
     try:
-        with mysql.connection.cursor() as cursor:
-            # 插入消息记录
-            cursor.execute("""
-                INSERT INTO ConversationInfo (
-                    Sender_id, Receiver_id, Message_sent, Message_type, Pic_url, Message_time, Is_read, Is_deleted
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, 0, 0)
-            """, (sender_id, receiver_id, message_sent, message_type, pic_url, message_time))
-            mysql.connection.commit()
+        # 插入消息记录
+        message_data = {
+            'Sender_id': sender_id,
+            'Receiver_id': receiver_id,
+            'Message_sent': message_sent,
+            'Message_type': message_type,
+            'Pic_url': pic_url,
+            'Message_time': message_time,
+            'Is_read': 0,
+            'Is_deleted': 0
+        }
+        insert('ConversationInfo', message_data)
 
-            # 实时通知接收者
-            socketio.emit('new_message', {
-                "Sender_id": sender_id,
-                "Receiver_id": receiver_id,
-                "Message_sent": message_sent,
-                "Message_type": message_type,
-                "Pic_url": pic_url,
-                "Message_time": message_time.strftime('%Y-%m-%d %H:%M:%S')
-            }, room=f"user_{receiver_id}")
+        # 实时通知接收者
+        socketio.emit('new_message', {
+            "Sender_id": sender_id,
+            "Receiver_id": receiver_id,
+            "Message_sent": message_sent,
+            "Message_type": message_type,
+            "Pic_url": pic_url,
+            "Message_time": message_time.strftime('%Y-%m-%d %H:%M:%S')
+        }, room=f"user_{receiver_id}")
 
-        return jsonify({'message': 'Message sent successfully',"status":'success'}), 201
+        return jsonify({'message': 'Message sent successfully', "status": 'success'}), 201
     except Exception as e:
-        mysql.connection.rollback()
         return jsonify({'message': 'Error occurred while sending message', 'error': str(e)}), 500
 
-import os
 QR_path = 'QR'
 QR_folder = os.path.join(os.getcwd(), QR_path)
 
-# 发送消息
+# 发送图片消息
 @bp.route('/sendphoto', methods=['POST'])
 def send_photo():
-
     file = request.files['photo'].stream.read()
-    # 获取发送者和接收者信息
     sender_id = request.form['Sender_id']
     receiver_id = request.form['Receiver_id']
     message_sent = ''
@@ -68,30 +66,48 @@ def send_photo():
         return jsonify({'message': 'Missing required fields'}), 400
 
     try:
-        with mysql.connection.cursor() as cursor:
-            # 插入消息记录
-            cursor.execute("""
-                INSERT INTO ConversationInfo (
-                    Sender_id, Receiver_id, Message_sent, Message_type, Pic_url, Message_time, Is_read, Is_deleted
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, 0, 0)
-            """, (sender_id, receiver_id, message_sent, message_type, '', message_time))
-            mysql.connection.commit()
+        # 插入消息记录
+        message_data = {
+            'Sender_id': sender_id,
+            'Receiver_id': receiver_id,
+            'Message_sent': message_sent,
+            'Message_type': message_type,
+            'Pic_url': '',
+            'Message_time': message_time,
+            'Is_read': 0,
+            'Is_deleted': 0
+        }
+        insert('ConversationInfo', message_data)
 
-            cursor.execute("""SELECT * FROM ConversationInfo WHERE 
-    (Sender_id = %s AND Receiver_id = %s)
-    OR (Sender_id = %s AND Receiver_id = %s) ORDER BY Message_time DESC LIMIT 1
-            """,(sender_id,receiver_id,receiver_id,sender_id))
+        # 获取最新消息ID
+        latest_message = select(
+            table="ConversationInfo",
+            fields="*",
+            conditions={
+                "OR": [
+                    {"Sender_id": sender_id, "Receiver_id": receiver_id},
+                    {"Sender_id": receiver_id, "Receiver_id": sender_id}
+                ]
+            },
+            order_by="Message_time DESC",
+            limit=1,
+            fetchone=True
+        )
 
-            message = cursor.fetchone()
-            Conversation_id = message[0]
-            file_path = os.path.join(QR_folder, f"{Conversation_id}.jpg")
-            with open(file_path, 'wb') as f:
-                f.write(file)
+        Conversation_id = latest_message['Conversation_id']
+        file_path = os.path.join(QR_folder, f"{Conversation_id}.jpg")
+        with open(file_path, 'wb') as f:
+            f.write(file)
 
-        return jsonify({'profileurl': file_path,'message': 'Message sent successfully',"status":'success'}), 201
+        # 更新图片URL
+        update(
+            table="ConversationInfo",
+            data={"Pic_url": file_path},
+            conditions={"Conversation_id": Conversation_id}
+        )
+
+        return jsonify({'profileurl': file_path, 'message': 'Message sent successfully', "status": 'success'}), 201
     except Exception as e:
-        mysql.connection.rollback()
         return jsonify({'message': 'Error occurred while sending message', 'error': str(e)}), 500
 
 @bp.route('/history', methods=['POST'])
@@ -107,17 +123,20 @@ def get_chat_history():
         return jsonify({'message': 'Missing required fields'}), 400
 
     try:
-        with mysql.connection.cursor(DictCursor) as cursor:
-            # 获取聊天记录
-            cursor.execute("""
-                SELECT * FROM ConversationInfo
-                WHERE 
-                    (Sender_id = %s AND Receiver_id = %s) OR 
-                    (Sender_id = %s AND Receiver_id = %s)
-                ORDER BY Message_time ASC
-                LIMIT %s OFFSET %s
-            """, (user_id, contact_id, contact_id, user_id, limit, offset))
-            messages = cursor.fetchall()
+        # 获取聊天记录
+        messages = select(
+            table="ConversationInfo",
+            fields="*",
+            conditions={
+                "OR": [
+                    {"Sender_id": user_id, "Receiver_id": contact_id},
+                    {"Sender_id": contact_id, "Receiver_id": user_id}
+                ]
+            },
+            order_by="Message_time ASC",
+            limit=limit,
+            offset=offset
+        )
 
         return jsonify({
             "status": "success",
@@ -127,12 +146,10 @@ def get_chat_history():
     except Exception as e:
         return jsonify({'message': 'Error occurred while fetching chat history', 'error': str(e)}), 500
 
-
 # 标记消息为已读
 @bp.route('/mark_as_read', methods=['POST'])
 def mark_as_read():
     data = request.get_json()
-
     user_id = data.get('user_id')
     contact_id = data.get('contact_id')
 
@@ -140,18 +157,19 @@ def mark_as_read():
         return jsonify({'message': 'Missing required fields'}), 400
 
     try:
-        with mysql.connection.cursor() as cursor:
-            # 更新未读消息为已读
-            cursor.execute("""
-                UPDATE ConversationInfo
-                SET Is_read = 1
-                WHERE Sender_id = %s AND Receiver_id = %s AND Is_read = 0
-            """, (contact_id, user_id))
-            mysql.connection.commit()
+        # 更新未读消息为已读
+        updated = update(
+            table="ConversationInfo",
+            data={"Is_read": 1},
+            conditions={
+                "Sender_id": contact_id,
+                "Receiver_id": user_id,
+                "Is_read": 0
+            }
+        )
 
         return jsonify({'message': 'Messages marked as read successfully'}), 200
     except Exception as e:
-        mysql.connection.rollback()
         return jsonify({'message': 'Error occurred while marking messages as read', 'error': str(e)}), 500
 
 # 获取未读消息数量
@@ -164,20 +182,18 @@ def get_unread_count():
         return jsonify({'message': 'Missing required fields'}), 400
 
     try:
-        with mysql.connection.cursor(DictCursor) as cursor:
-            # 查询未读消息数量
-            cursor.execute("""
-                SELECT Sender_id, COUNT(*) as unread_count
-                FROM ConversationInfo
-                WHERE Receiver_id = %s AND Is_read = 0
-                GROUP BY Sender_id
-            """, (user_id,))
-            unread_counts = cursor.fetchall()
+        # 查询未读消息数量
+        unread_counts = select(
+            table="ConversationInfo",
+            fields=["Sender_id", "COUNT(*) as unread_count"],
+            conditions={"Receiver_id": user_id, "Is_read": 0},
+            group_by="Sender_id"
+        )
 
         return jsonify(unread_counts), 200
     except Exception as e:
         return jsonify({'message': 'Error occurred while fetching unread counts', 'error': str(e)}), 500
-    
+
 # 获取所有有过聊天记录的学生信息
 @bp.route('/contacts', methods=['POST'])
 def get_chat_contacts():
@@ -188,24 +204,17 @@ def get_chat_contacts():
         return jsonify({'message': '缺少必要的参数: student_id'}), 400
 
     try:
-        with mysql.connection.cursor(DictCursor) as cursor:
-            # 查询与当前学生有聊天记录的所有学生的基本信息
-            sql_query_contacts = """
-                SELECT DISTINCT 
-                    s.Student_id, 
-                    s.Student_name, 
-                    s.Student_nickname, 
-                    s.Student_profileurl
-                FROM 
-                    ConversationInfo c
-                JOIN 
-                    Student s 
-                ON 
-                    (c.Sender_id = s.Student_id AND c.Receiver_id = %s) 
-                    OR (c.Receiver_id = s.Student_id AND c.Sender_id = %s)
-            """
-            cursor.execute(sql_query_contacts, (student_id, student_id))
-            contacts = cursor.fetchall()
+        # 查询与当前学生有聊天记录的所有学生的基本信息
+        contacts = select(
+            table="ConversationInfo c JOIN Student s ON (c.Sender_id = s.Student_id AND c.Receiver_id = %s) OR (c.Receiver_id = s.Student_id AND c.Sender_id = %s)",
+            fields=[
+                "DISTINCT s.Student_id",
+                "s.Student_name",
+                "s.Student_nickname",
+                "s.Student_profileurl"
+            ],
+            params=(student_id, student_id)
+        )
 
         # 格式化结果
         contact_list = [
@@ -225,7 +234,6 @@ def get_chat_contacts():
         }), 200
     except Exception as e:
         return jsonify({'message': 'Error occurred while fetching chat contacts', 'error': str(e)}), 500
-
 
 # WebSocket 事件
 @socketio.on('connect')

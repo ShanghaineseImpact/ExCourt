@@ -1,10 +1,11 @@
-from flask import Blueprint, request, jsonify,send_from_directory
+from flask import Blueprint, request, jsonify, send_from_directory
 from app import mysql
 from flask_cors import CORS
 import os
-
 import random
 import string
+from datetime import datetime
+from execute_for_sql import select, insert, update, delete  # 导入你封装的SQL函数
 
 def generate_random_string(length=10):
     # 选择包含的字符（字母和数字）
@@ -110,23 +111,28 @@ def get_lost():
     lost_id = data.get('Lost_id')
 
     try:
-        with mysql.connection.cursor() as cursor:
-            # 插入消息记录
-            cursor.execute("""
-                SELECT Lost_item_pic_url FROM MyLost where Lost_id = %s
-            """, (lost_id,))
-            mysql.connection.commit()
-            url = cursor.fetchone()
-            url = url[0]
+        # 使用封装的select函数替换原始SQL
+        result = select(
+            table="MyLost",
+            fields=["Lost_item_pic_url"],
+            conditions={"Lost_id": lost_id},
+            fetchone=True
+        )
+        
+        if result and 'Lost_item_pic_url' in result:
+            url = result['Lost_item_pic_url']
+            
+            # 遍历文件夹寻找匹配的图片
+            for filename in os.listdir(lf_folder):
+                if url in filename:  # 根据关键字匹配文件名
+                    image_url = f"http://123.60.86.239:8000/upload/lost/{filename}"
+                    return jsonify({'imageUrl': image_url}), 200
 
-    # 遍历文件夹寻找匹配的图片
-        for filename in os.listdir(lf_folder):
-            if url in filename:  # 根据关键字匹配文件名
-                image_url = f"http://123.60.86.239:8000/upload/lost/{filename}"
-                return jsonify({'imageUrl': image_url}),200
-
-    # 如果没有找到图片
-        return jsonify({'error': 'Image not found'}), 404
+            # 如果没有找到图片
+            return jsonify({'error': 'Image not found'}), 404
+        else:
+            return jsonify({'error': 'Record not found'}), 404
+            
     except Exception as e:
         return jsonify({"message": "Error occurred while fetching lost items", "error": str(e)}), 500
 
