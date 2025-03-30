@@ -1,6 +1,0 @@
-<view class="container">
-  <text>学号: {{application.studentId}}</text>
-  <text>姓名: {{application.studentName}}</text>
-  <text>信誉分: {{application.creditScore}}</text>
-  <!-- 添加更多详细信息 -->
-</view>
