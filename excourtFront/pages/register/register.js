@@ -1,3 +1,6 @@
+/*
+注册账户，对于第一次登录的用户，相当于同济大学统一身份验证。注册后才会出现在系统数据库中
+*/
 Page({
   data: {
     student_id: '',
@@ -47,7 +50,7 @@ Page({
 
     // 向Flask后端发送请求
     wx.request({
-      url: 'http://123.60.86.239:5000/verify', // Flask后端的URL
+      url: 'http://localhost:5000/verify', // Flask后端的URL
       method: 'POST',
       header: {
         'Content-Type': 'application/json'
@@ -66,7 +69,7 @@ Page({
           });
           this.registerInSystem();
           // 注册成功后跳转到登录页面
-          wx.navigateTo({ url: '/pages/6-login/Login' });
+          wx.navigateTo({ url: '/pages/login/login' });
         } else if (res.statusCode === 404){
           wx.showToast({
             title: '数据匹配失败',
@@ -87,7 +90,7 @@ Page({
   },
   registerInSystem(){
     wx.request({
-      url:'http://123.60.86.239:8000/student/register',
+      url:'http://localhost:8000/student/register',
       method: 'POST',
       header: {
         'Content-Type': 'application/json'

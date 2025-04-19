@@ -1,0 +1,107 @@
+INSERT INTO Student (Student_id, Student_name, Student_phone, Student_password) VALUES
+(2250681, '赵嘉禾', '18004855049', '2250681'),
+(2254228, '朱雨欢', '14782034156', '2254228'),
+(2251146, '吴天宇', '11111111111', '2251146'),
+(2251181, '仇伟烨', '22222222222', '2251181'),
+(2254296, '侯青山', '33333333333', '2254296'),
+(2252403, '赵唯旭', '44444444444', '2252403');
+
+INSERT INTO CourtInfo (
+    Court_id,
+    Court_campus,
+    Court_date,
+    Court_time,
+    Court_no,
+    Court_state
+) VALUES 
+('JiaDing-2025-4-24-0-0', 'JiaDing', '2025-4-24', 0, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-0-1', 'JiaDing', '2025-4-24', 0, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-0-2', 'JiaDing', '2025-4-24', 0, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-0-3', 'JiaDing', '2025-4-24', 0, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-0-4', 'JiaDing', '2025-4-24', 0, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-0-5', 'JiaDing', '2025-4-24', 0, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-1-0', 'JiaDing', '2025-4-24', 1, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-1-1', 'JiaDing', '2025-4-24', 1, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-1-2', 'JiaDing', '2025-4-24', 1, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-1-3', 'JiaDing', '2025-4-24', 1, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-1-4', 'JiaDing', '2025-4-24', 1, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-1-5', 'JiaDing', '2025-4-24', 1, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-2-0', 'JiaDing', '2025-4-24', 2, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-2-1', 'JiaDing', '2025-4-24', 2, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-2-2', 'JiaDing', '2025-4-24', 2, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-2-3', 'JiaDing', '2025-4-24', 2, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-2-4', 'JiaDing', '2025-4-24', 2, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-2-5', 'JiaDing', '2025-4-24', 2, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-3-0', 'JiaDing', '2025-4-24', 3, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-3-1', 'JiaDing', '2025-4-24', 3, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-3-2', 'JiaDing', '2025-4-24', 3, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-3-3', 'JiaDing', '2025-4-24', 3, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-3-4', 'JiaDing', '2025-4-24', 3, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-3-5', 'JiaDing', '2025-4-24', 3, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-4-0', 'JiaDing', '2025-4-24', 4, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-4-1', 'JiaDing', '2025-4-24', 4, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-4-2', 'JiaDing', '2025-4-24', 4, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-4-3', 'JiaDing', '2025-4-24', 4, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-4-4', 'JiaDing', '2025-4-24', 4, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-4-5', 'JiaDing', '2025-4-24', 4, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-5-0', 'JiaDing', '2025-4-24', 5, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-5-1', 'JiaDing', '2025-4-24', 5, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-5-2', 'JiaDing', '2025-4-24', 5, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-5-3', 'JiaDing', '2025-4-24', 5, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-5-4', 'JiaDing', '2025-4-24', 5, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-5-5', 'JiaDing', '2025-4-24', 5, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-6-0', 'JiaDing', '2025-4-24', 6, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-6-1', 'JiaDing', '2025-4-24', 6, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-6-2', 'JiaDing', '2025-4-24', 6, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-6-3', 'JiaDing', '2025-4-24', 6, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-6-4', 'JiaDing', '2025-4-24', 6, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-6-5', 'JiaDing', '2025-4-24', 6, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-7-0', 'JiaDing', '2025-4-24', 7, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-7-1', 'JiaDing', '2025-4-24', 7, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-7-2', 'JiaDing', '2025-4-24', 7, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-7-3', 'JiaDing', '2025-4-24', 7, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-7-4', 'JiaDing', '2025-4-24', 7, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-7-5', 'JiaDing', '2025-4-24', 7, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-8-0', 'JiaDing', '2025-4-24', 8, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-8-1', 'JiaDing', '2025-4-24', 8, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-8-2', 'JiaDing', '2025-4-24', 8, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-8-3', 'JiaDing', '2025-4-24', 8, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-8-4', 'JiaDing', '2025-4-24', 8, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-8-5', 'JiaDing', '2025-4-24', 8, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-9-0', 'JiaDing', '2025-4-24', 9, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-9-1', 'JiaDing', '2025-4-24', 9, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-9-2', 'JiaDing', '2025-4-24', 9, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-9-3', 'JiaDing', '2025-4-24', 9, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-9-4', 'JiaDing', '2025-4-24', 9, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-9-5', 'JiaDing', '2025-4-24', 9, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-10-0', 'JiaDing', '2025-4-24', 10, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-10-1', 'JiaDing', '2025-4-24', 10, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-10-2', 'JiaDing', '2025-4-24', 10, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-10-3', 'JiaDing', '2025-4-24', 10, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-10-4', 'JiaDing', '2025-4-24', 10, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-10-5', 'JiaDing', '2025-4-24', 10, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-11-0', 'JiaDing', '2025-4-24', 11, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-11-1', 'JiaDing', '2025-4-24', 11, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-11-2', 'JiaDing', '2025-4-24', 11, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-11-3', 'JiaDing', '2025-4-24', 11, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-11-4', 'JiaDing', '2025-4-24', 11, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-11-5', 'JiaDing', '2025-4-24', 11, '场地6', 'not_owned'),
+('JiaDing-2025-4-24-12-0', 'JiaDing', '2025-4-24', 12, '场地1', 'not_owned'),
+('JiaDing-2025-4-24-12-1', 'JiaDing', '2025-4-24', 12, '场地2', 'not_owned'),
+('JiaDing-2025-4-24-12-2', 'JiaDing', '2025-4-24', 12, '场地3', 'not_owned'),
+('JiaDing-2025-4-24-12-3', 'JiaDing', '2025-4-24', 12, '场地4', 'not_owned'),
+('JiaDing-2025-4-24-12-4', 'JiaDing', '2025-4-24', 12, '场地5', 'not_owned'),
+('JiaDing-2025-4-24-12-5', 'JiaDing', '2025-4-24', 12, '场地6', 'not_owned');
+
+UPDATE CourtInfo SET Court_owner = 2250681, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-0-0';
+UPDATE CourtInfo SET Court_owner = 2254228, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-1-1';
+UPDATE CourtInfo SET Court_owner = 2251146, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-2-2';
+UPDATE CourtInfo SET Court_owner = 2251181, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-4-3';
+UPDATE CourtInfo SET Court_owner = 2254296, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-3-4';
+UPDATE CourtInfo SET Court_owner = 2252403, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-5-5';
+UPDATE CourtInfo SET Court_owner = 2250681, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-6-0';
+UPDATE CourtInfo SET Court_owner = 2254228, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-7-1';
+UPDATE CourtInfo SET Court_owner = 2251146, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-8-2';
+UPDATE CourtInfo SET Court_owner = 2251181, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-9-3';
+UPDATE CourtInfo SET Court_owner = 2254296, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-10-4';
+UPDATE CourtInfo SET Court_owner = 2252403, Court_state = 'owned' WHERE Court_id = 'JiaDing-2025-4-24-11-5';

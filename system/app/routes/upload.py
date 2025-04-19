@@ -5,7 +5,7 @@ import os
 import random
 import string
 from datetime import datetime
-from execute_for_sql import select, insert, update, delete  # 导入你封装的SQL函数
+from .execute_for_sql import select, insert, update, delete  # 导入你封装的SQL函数
 
 def generate_random_string(length=10):
     # 选择包含的字符（字母和数字）

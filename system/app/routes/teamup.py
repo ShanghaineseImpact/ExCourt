@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app import mysql
 from datetime import datetime
-from execute_for_sql import select, insert, update  # 导入封装的SQL函数
+from .execute_for_sql import select, insert, update  # 导入封装的SQL函数
 
 bp = Blueprint('teamup', __name__, url_prefix='/teamup')
 

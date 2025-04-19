@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from execute_for_sql import select, insert  # 导入封装的SQL函数
+from .execute_for_sql import select, insert  # 导入封装的SQL函数
 
 bp = Blueprint('lost_and_found', __name__, url_prefix='/lost_and_found')
 

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
-from execute_for_sql import select, insert, update  # 导入封装的SQL函数
+from app import socketio  # 导入socketio实例
+from .execute_for_sql import select, insert, update  # 导入封装的SQL函数
 import os
 
 bp = Blueprint('chat', __name__, url_prefix='/chat')

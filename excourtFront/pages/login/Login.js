@@ -1,4 +1,6 @@
-// Login.js
+/*
+登录界面
+*/
 Page({
   data: {
       student_id: '', // 绑定输入框的学号数据
@@ -30,7 +32,7 @@ bindLogin: function() {
   }
 
   wx.request({
-      url: 'http://123.60.86.239:8000/student/login', // 后端登录接口
+      url: 'http://localhost:8000/student/login', // 后端登录接口
       method: 'POST',
       data: {
           Student_id: this.data.student_id,
@@ -67,7 +69,7 @@ bindLogin: function() {
               });
           } else {
               wx.showToast({
-                  title: res.data.message || '登录失败',
+                  title: res.data.error || '登录失败',
                   icon: 'none'
               });
           }
@@ -85,7 +87,7 @@ bindLogin: function() {
 
   goToRegister: function() {
       wx.navigateTo({
-          url: '/pages/6-register/register'
+          url: '/pages/register/register'
       });
   }
 });

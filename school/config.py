@@ -1,7 +1,7 @@
 # config.py
 class Config:
-    MYSQL_HOST = '123.60.86.239'
+    MYSQL_HOST = 'localhost'
     MYSQL_PORT =  3306       
     MYSQL_USER = 'root'
-    MYSQL_PASSWORD = 'QWer1234'
+    MYSQL_PASSWORD = '557177Hou'
     MYSQL_DB = 'school'

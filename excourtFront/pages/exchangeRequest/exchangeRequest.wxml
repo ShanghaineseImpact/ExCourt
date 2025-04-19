@@ -1,4 +1,3 @@
-<!-- sendCourt.wxml -->
 <view class="container">
   <!-- 图例 -->
   <view class="legend">

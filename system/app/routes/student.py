@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
-from execute_for_sql import select, insert, update, delete  # 导入封装的SQL函数
+from .execute_for_sql import select, insert, update, delete  # 导入封装的SQL函数
 
 bp = Blueprint('student', __name__, url_prefix='/student')
 
@@ -51,7 +51,7 @@ def login():
             table="Student",
             fields=["Student_password"],
             conditions={"Student_id": student_id},
-            fetchone=True
+            fetchone=True #这里问题
         )
 
         if not result:

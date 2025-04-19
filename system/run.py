@@ -14,7 +14,9 @@ def start_sync_task():
                 sync_court_info()
             except Exception as e:
                 print(f"Sync task encountered an error: {e}")
-                time.sleep(5)  # 等待一段时间后重启任务
+                time.sleep(30)  # 等待一段时间后重启任务
+            else:
+                time.sleep(5)
 
     sync_thread = threading.Thread(target=run_sync, daemon=True)
     sync_thread.start()
