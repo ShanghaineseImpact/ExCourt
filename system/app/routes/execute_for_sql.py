@@ -193,6 +193,8 @@ def select(
     # 合并所有参数
     all_params = params + union_params
 
+    # print("SQL Query:", full_query)
+
     # 执行查询
     return execute_query(full_query, all_params)
 

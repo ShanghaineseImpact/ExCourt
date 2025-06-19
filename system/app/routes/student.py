@@ -51,25 +51,50 @@ def login():
             table="Student",
             fields=["Student_password"],
             conditions={"Student_id": student_id},
-            fetchone=True #这里问题
+            # fetchone=True #这里问题
         )
+
+        # print(result)
 
         if not result:
             return jsonify({'message': 'Student_id not found'}), 404
 
-        if result['Student_password'] != password:
-            return jsonify({'message': 'Incorrect password'}), 401
 
+        #if result['Student_password'] != password:
+        #    return jsonify({'message': 'Incorrect password'}), 401
+
+        flag=0
+        for row in result:
+            if row['Student_password'] == password:
+                flag=1
+                #return jsonify({'message': 'Incorrect password'}), 401
+            
+        if flag==0:
+            return jsonify({'message': 'Incorrect password'}), 401
+        
         student = select(
             table="Student",
             fields=["Student_id", "Student_name"],
             conditions={"Student_id": student_id},
-            fetchone=True
+            #fetchone=True
         )
+        # print('stu',student)
+        res = 0
+        for row in student:
+            # print('row',row)
+            # id转int
+            student_id = int(student_id)
+            if row['Student_id'] == student_id:
+                res = row
+                # print('resfor',res)
+                break
+        if not res:
+            return jsonify({'message': 'Student_id not found'}), 404
+        # print('res',res)
         return jsonify({
             'message': 'Login successful',
-            'Student_id': student['Student_id'],
-            'Student_name': student['Student_name']
+            'Student_id': res['Student_id'],
+            'Student_name': res['Student_name']
         })
     except Exception as e:
         return jsonify({'message': 'Error occurred while logging in', 'error': str(e)}), 500
